@@ -1,6 +1,6 @@
 # Ближайшие бары
 
-[FIXME. Здесь будет описание проекта]
+[TODO. Здесь будет описание проекта]
 
 # Как запустить
 
@@ -11,7 +11,7 @@
 ```bash
 
 $ python bars.py # possibly requires call of python3 executive instead of just python
-# FIXME вывести пример ответа скрипта
+# TODO вывести пример ответа скрипта
 
 ```
 
