@@ -3,7 +3,7 @@ import math
 import requests
 import http_status
 
-DATA_MOS_RU_URL = 'https://apidata.mos.ru/v1/features/1796?api_key='
+DATA_MOS_RU_URL = 'https://apidata.mos.ru/v1/features/1796'
 DATA_MOS_RU_API_KEY = 'd972f4bad54daf8410866cf9472f9efc'
 
 
@@ -19,13 +19,13 @@ def input_coordinates():
             continue
 
 
-def load_data(api_address, api_key):
-    url = ''.join([api_address, api_key])
-    r = requests.get(url)
-    if r.status_code == 200:
-        return r.json()
+def load_data(address, key):
+    payload = {'api_key': key}
+    response = requests.get(address, params=payload)
+    if response.ok:
+        return response.json()
     else:
-        http_error = http_status.Status(r.status_code)
+        http_error = http_status.Status(response.status_code)
         exception_description = 'Error {code}: {desc}'.format(
             code=http_error.code,
             desc=http_error.description,
@@ -33,16 +33,16 @@ def load_data(api_address, api_key):
         raise IOError(exception_description)
 
 
-def get_biggest_bar(data):
-    return max(data['features'], key=lambda x: x['properties']['Attributes']['SeatsCount'])
+def get_biggest_bar(all_bars_data):
+    return max(all_bars_data['features'], key=lambda x: x['properties']['Attributes']['SeatsCount'])
 
 
-def get_smallest_bar(data):
-    return min(data['features'], key=lambda x: x['properties']['Attributes']['SeatsCount'])
+def get_smallest_bar(all_bars_data):
+    return min(all_bars_data['features'], key=lambda x: x['properties']['Attributes']['SeatsCount'])
 
 
-def get_closest_bar(data, longitude, latitude):
-    return min(data['features'],
+def get_closest_bar(all_bars_data, longitude, latitude):
+    return min(all_bars_data['features'],
                key=lambda x: math.hypot(x['geometry']['coordinates'][0] - longitude,
                                         x['geometry']['coordinates'][1] - latitude))
 
