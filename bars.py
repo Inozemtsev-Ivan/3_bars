@@ -30,26 +30,20 @@ def get_closest_bar(data, longitude, latitude):
                                         x['geometry']['coordinates'][1] - latitude))
 
 
+def print_bar_info(kind_of_bar, bar_representation):
+    print('Самый {kind} бар на {seats} мест: {name} по адресу {address}'.format(
+        kind=kind_of_bar,
+        seats=bar_representation['properties']['Attributes']['SeatsCount'],
+        name=bar_representation['properties']['Attributes']['Name'],
+        address=bar_representation['properties']['Attributes']['Address'],
+    ))
+
+
 if __name__ == '__main__':
     try:
         all_bars = load_data(FILE_PATH)
-        biggest_bar_attributes = get_biggest_bar(all_bars)['properties']['Attributes']
-        print('Самый большой бар на {seats} мест: {name} по адресу {address}'.format(
-            seats=biggest_bar_attributes['SeatsCount'],
-            name=biggest_bar_attributes['Name'],
-            address=biggest_bar_attributes['Address']
-        ))
-        smallest_bar_attributes = get_smallest_bar(all_bars)['properties']['Attributes']
-        print('Самый маленький бар на {seats} мест: {name} по адресу {address}'.format(
-            seats=smallest_bar_attributes['SeatsCount'],
-            name=smallest_bar_attributes['Name'],
-            address=smallest_bar_attributes['Address']
-        ))
-        closest_bar_attributes = \
-            get_closest_bar(all_bars, LONGITUDE, LATITUDE)['properties']['Attributes']
-        print('Самый близкий бар: {name} по адресу {address}'.format(
-            name=closest_bar_attributes['Name'],
-            address=closest_bar_attributes['Address']
-        ))
+        print_bar_info('большой', get_biggest_bar(all_bars))
+        print_bar_info('маленький', get_smallest_bar(all_bars))
+        print_bar_info('ближайший', get_closest_bar(all_bars, LONGITUDE, LATITUDE))
     except FileNotFoundError:
         sys.exit('File with data is missed!')
