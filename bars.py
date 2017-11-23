@@ -9,14 +9,8 @@ DATA_MOS_RU_API_KEY = 'd972f4bad54daf8410866cf9472f9efc'
 
 def input_coordinates():
     print('Укажите широту и долготу через пробел, например, "37.6269 55.7535"')
-    while True:
-        elements = input('>').split()
-        try:
-            longitude, latitude = map(float, elements)
-            return longitude, latitude
-        except ValueError:
-            print('Неправильно указаны координаты! Повторите ввод.')
-            continue
+    elements = input('>').split()
+    return map(float, elements)
 
 
 def load_data(address, key):
@@ -61,7 +55,10 @@ if __name__ == '__main__':
         all_bars = load_data(DATA_MOS_RU_URL, DATA_MOS_RU_API_KEY)
     except IOError as ex:
         sys.exit(str(ex))
-    longitude, latitude = input_coordinates()
+    try:
+        longitude, latitude = input_coordinates()
+    except ValueError:
+        sys.exit('Неправильно введены данные! Перезапустите программу и введите корректные данные')
     print_bar_info('большой', get_biggest_bar(all_bars))
     print_bar_info('маленький', get_smallest_bar(all_bars))
     print_bar_info('ближайший', get_closest_bar(all_bars, longitude, latitude))
